@@ -1,0 +1,572 @@
+<app-navbar></app-navbar>
+<!-- <p-toast/> -->
+<div class="d-flex justify-content-end c-p">
+  <button *ngIf="data.length>0" class="border-0" (click)="onClickCloseBtn()">
+     <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
+  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"/>
+</svg> 
+  </button>
+
+</div>
+
+<table class="table table-dark table-striped" *ngIf="data.length>0" >
+    <thead>
+        <tr>
+          
+        <th scope="col">Emp No</th>
+        <th scope="col">Full Name</th>
+        <th scope="col">Department</th>
+        <th scope="col">Location</th>
+        <th scope="col">Joining Date</th>
+        <th scope="col">Manager name</th>
+        <th scope="col">Project Name</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of data">
+        <th scope="row">{{ data.empId }}</th>
+        <td>{{ data.firstName + " " + data.lastName }}</td>
+        <td>{{ data.department }}</td>
+        <td>{{ data.location }}</td>
+        <td>{{ data.joinDate.split('T')[0] }}</td>
+        <td>{{ data.manager }}</td>
+        <td>{{ data.project }}</td>
+      </tr>
+    </tbody>
+</table>
+<div class="get-all">
+    <button class="btn-primary m-2 w-100" (click)="onGetEmpDetails()">
+        Get All Employee Details
+    </button>
+</div>
+
+<div class="get-one d-flex flex-column " >
+    <button
+      class="btn-success m-2"
+      data-bs-toggle="modal"
+      data-bs-target="#get-one-emp"
+    >
+      Get One Employee Details
+    </button>
+    <div
+      class="modal fade"
+      id="get-one-emp"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+      tabindex="-1"
+      aria-labelledby="staticBackdropLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" >
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="staticBackdropLabel">
+              Employee Id
+            </h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div>
+              <p class="badge bg-dark text-light m-2">
+                Enter a Employee Id To Display:
+              </p>
+              <input
+                required 
+                type="text"
+                name="empId"
+                #id
+                placeholder="TZXXXX"
+              />
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button
+              type="submit"
+              class="btn btn-primary"
+              (click)="onGetOneEmpDetails()"
+            >
+              Display
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="delete-one">
+    <div
+        class="modal fade"
+        id="exampleModal1"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        tabindex="-1"
+        aria-labelledby="staticBackdropLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog" >
+          <div class="modal-content" >
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="staticBackdropLabel">Employee Id</h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <div class="delete">
+                <p class="badge bg-dark text-light m-2">
+                  Enter a Employee Id To Be Deleted:
+                </p>
+                <input
+                  required
+                  type="text"
+                  name="empId"
+                  #deleteId
+                  placeholder="TZXXXX"
+                /><br />
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+              <button
+                type="button"
+                class="btn btn-danger"
+                (click)="deleteEmp(deleteId)"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button
+        class="btn-danger m-2 w-100"
+        data-bs-toggle="modal"
+        data-bs-target="#exampleModal1"
+        
+      >
+        Delete Employee
+      </button>
+    </div>
+    <div class="add-emp">
+        <div
+          class="modal fade"
+          id="staticBackdrop"
+          data-bs-backdrop="static"
+          data-bs-keyboard="false"
+          tabindex="-1"
+          aria-labelledby="staticBackdropLabel"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog"  >
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                  Fill Employee Details
+                </h1>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body">
+                <div class="container">
+                  <form #form="ngForm" (ngSubmit)="onSubmit(form)" [formGroup]="reactiveForm">
+                    <div class="row mb-3">
+                      <label for="inputEmail3" class="col-sm-2 col-form-label"
+                        >Employee Id</label
+                      >
+                      <div class="col-sm-4">
+                        <input
+                          required
+                          type="text"
+                          class="form-control emp-id"
+                          id="id"
+                          name="empId"
+                          value="TZXXXX"
+                          formControlName="empId"
+                        />
+                      </div>
+                      <small *ngIf="reactiveForm.get('empId').touched && reactiveForm.get('empId').invalid">*Check Your Employee Id(pattern:TZXXXX)</small>
+                    </div>
+                    <div class="row mb-3">
+                      <label for="FirstName" class="col-sm-2 col-form-label"
+                        >First Name</label
+                      >
+                      <div class="col-sm-4">
+                        <input
+                          required
+                          type="text"
+                          class="form-control"
+                          id="fname"
+                          
+                          name="firstName"
+                          formControlName="firstname"
+                        />
+                      </div>
+                      <label for="Last" class="col-sm-2 col-form-label"
+                        >Last Name</label
+                      >
+                      <div class="col-sm-4">
+                        <input
+                          required
+                          type="text"
+                          class="form-control"
+                          id="lname"
+                          
+                          name="lastName"
+                          formControlName="lastname"
+                        />
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label for="Department" class="col-sm-2 col-form-label"
+                        >Department</label
+                      >
+                      <div class="col-sm-4">
+                        <input
+                          required
+                          type="text"
+                          class="form-control"
+                          id="dept"
+                          name="department"
+                          
+                          formControlName="department"
+                        />
+                      </div>
+                      <label for="Location" class="col-sm-2 col-form-label"
+                        >Location</label
+                      >
+                      <div class="col-sm-4">
+                        <input
+                          required
+                          type="text"
+                          class="form-control"
+                          id="loc"
+                          name="location"
+                          
+                          formControlName="location"
+                        />
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label for="Joining" class="col-sm-2 col-form-label"
+                        >Joining Date</label
+                      >
+                      <div class="col-sm-4">
+                        <input
+                          required
+                          type="date"
+                          class="form-control"
+                          id="jdate"
+                          name="joinDate"
+                          
+                          formControlName="joinDate"
+                        />
+                      </div>
+                      <label for="Manager" class="col-sm-2 col-form-label"
+                        >Manager</label
+                      >
+                      <div class="col-sm-4">
+                        <input
+                          required
+                          type="text"
+                          class="form-control"
+                          id="manager"
+                          name="manager"
+                          
+                          formControlName="manager"
+                        />
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label for="Project" class="col-sm-2 col-form-label"
+                        >Project</label
+                      >
+                      <div class="col-sm-4">
+                        <input
+                          required
+                          type="text"
+                          class="form-control"
+                          id="project"
+                          name="project"
+                          
+                          formControlName="project"
+                        />
+                      </div>
+                    </div>
+                    <div class="d-flex justify-content-center"></div>
+                  <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                >
+                  Close
+                </button>
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  [disabled]="reactiveForm.invalid"
+                >
+                  ADD
+                </button>
+                  </div></form>
+                  
+                </div>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        <button
+          class="btn-warning m-2 w-100"
+          data-bs-toggle="modal"
+          data-bs-target="#staticBackdrop"
+        >
+          Add Employee
+        </button> 
+      </div>  
+      <div class="update-emp">
+        <button
+        class="btn-dark m-2 w-100"
+        data-bs-toggle="modal"
+        data-bs-target="#exampleModalUpdate"
+      >
+        Update Employee
+      </button>
+  
+      <div
+        class="modal fade"
+        id="exampleModalUpdate"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        tabindex="-1"
+        aria-labelledby="staticBackdropLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog" >
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="staticBackdropLabel">Employee Id</h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <div>
+                <p class="badge bg-dark text-light m-2">Enter a Employee Id:</p>
+                <input
+                  required type="text"
+                  name="empId"
+                  #idToBeUpdate
+                  placeholder="TZXXXX"
+                />
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+              <button
+                type="submit"
+                class="btn btn-primary"
+                (click)="onUpdateEmployee(idToBeUpdate)"
+                data-bs-toggle="modal"
+                data-bs-target="#staticBackdropUpdate"
+              >
+                Update
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+    <div
+      class="modal fade"
+      id="staticBackdropUpdate"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+      tabindex="-1"
+      aria-labelledby="staticBackdropLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" >
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="staticBackdropLabel">
+              Update Employee Details
+            </h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="container">
+              <form #formUpdate="ngForm" (ngSubmit)="onSubmitUpdate(formUpdate,id)">
+                <div class="row mb-3">
+                  <label for="inputEmail3" class="col-sm-2 col-form-label"
+                    >Employee Id</label
+                  >
+                  <div class="col-sm-4">
+                    <input
+                      required 
+                      type="text"
+                      class="form-control"
+                      id="id"
+                      ngModel
+                      name="empId"
+                      #id
+                     
+                    />
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label for="FirstName" class="col-sm-2 col-form-label"
+                    >First Name</label
+                  >
+                  <div class="col-sm-4">
+                    <input
+                      required
+                      type="text"
+                      class="form-control"
+                      id="fname"
+                      ngModel
+                      name="firstName"
+                    />
+                  </div>
+                  <label for="Last" class="col-sm-2 col-form-label"
+                    >Last Name</label
+                  >
+                  <div class="col-sm-4">
+                    <input
+                      required
+                      type="text"
+                      class="form-control"
+                      id="lname"
+                      ngModel
+                      name="lastName"
+                    />
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label for="Department" class="col-sm-2 col-form-label"
+                    >Department</label
+                  >
+                  <div class="col-sm-4">
+                    <input
+                      required
+                      type="text"
+                      class="form-control"
+                      id="dept"
+                      name="department"
+                      ngModel
+                    />
+                  </div>
+                  <label for="Location" class="col-sm-2 col-form-label"
+                    >Location</label
+                  >
+                  <div class="col-sm-4">
+                    <input
+                      required
+                      type="text"
+                      class="form-control"
+                      id="loc"
+                      name="location"
+                      ngModel
+                    />
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label for="Joining" class="col-sm-2 col-form-label"
+                    >Joining Date</label
+                  >
+                  <div class="col-sm-4">
+                    <input
+                      required
+                      type="date"
+                      class="form-control"
+                      id="jdate"
+                      name="joinDate"
+                      ngModel
+                    />
+                  </div>
+                  <label for="Manager" class="col-sm-2 col-form-label"
+                    >Manager</label
+                  >
+                  <div class="col-sm-4">
+                    <input
+                      required
+                      type="text"
+                      class="form-control"
+                      id="manager"
+                      name="manager"
+                      ngModel
+                    />
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label for="Project" class="col-sm-2 col-form-label"
+                    >Project</label
+                  >
+                  <div class="col-sm-4">
+                    <input
+                      required
+                      type="text"
+                      class="form-control"
+                      id="project"
+                      name="project"
+                      ngModel
+                    />
+                  </div>
+                </div>
+                <div class="d-flex justify-content-center"></div> <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              Close
+            </button>
+            <button type="submit" class="btn btn-primary" [disabled]="formUpdate.invalid">
+              UPDATE
+            </button>
+          </div>
+              </form>
+            </div>
+          </div>
+        
+        </div>
+      </div>
+    </div>
+    </div>
+
+
+

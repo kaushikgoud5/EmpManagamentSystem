@@ -1,0 +1,50 @@
+<div class="container flex">
+    <div class="facebook-page flex">
+      <div class="text">
+        <h1>Employee Management System</h1>
+      </div>
+      <form #formdata="ngForm">
+        <input *ngIf="isLogged" type="text" placeholder="Username" ngModel name="username"  >
+        <input type="text" placeholder="Email" ngModel name="email" required >
+        <small *ngIf="formdata.controls['email'].touched && formdata.controls['email'].invalid">*Email is required</small>
+        <input type="password" minlength="6" placeholder="Password"  ngModel required name="password">
+        <small *ngIf="formdata.controls['password'].touched && formdata.controls['password'].invalid">*Password should contain minimum 6 alphabets</small>
+        <div class="link">
+            <button type="button" class="login" (click)="onClickLogin(formdata)"  [disabled]="formdata.invalid" [ngStyle]="{'opacity': formdata.invalid ? '0.5' : '1'}">{{ !isLogged ? 'Login' : 'Signup' }}</button>
+            <button  class="forgot border-0" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Forgot password?</button>
+           
+        </div>
+      
+        <hr>
+        <small class="text-center">{{isLogged?'Have an account?':'Do not have an account?'}}</small>
+        <div class="button">
+          <button class="create-btn border-0" (click)="SwitchMode()">{{!isLogged?'Create new account':'Login'}}</button>
+        </div>
+        
+      </form>
+    </div>
+  </div>
+
+
+  <div class="container flex">
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">Forgot Your Password???</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <input type="text" placeholder="Email" ngModel  [(ngModel)]="resetPasswordEmail"  (ngModelChange)="checkValidEmail($event)" name="email" required >
+          <br>  
+          <!-- <small *ngIf=" !checkValidEmail $$ resetPasswordEmail">Email is invalid</small> -->
+          <small *ngIf="!resetPasswordEmail"> Email is required</small><br>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" (click)="onClickSend(resetPasswordEmail)">Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
